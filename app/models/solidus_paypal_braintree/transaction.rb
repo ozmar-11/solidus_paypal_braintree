@@ -9,7 +9,7 @@ module SolidusPaypalBraintree
     validates :nonce, presence: true
     validates :payment_method, presence: true
     validates :payment_type, presence: true
-    validates :phone, presence: true
+    validates :phone, presence: true, unless: :paid_with_paypal?
     validates :email, presence: true
 
     validate do
@@ -21,6 +21,10 @@ module SolidusPaypalBraintree
           errors.add(:address, "#{field} #{error}")
         end
       end
+    end
+
+    def paid_with_paypal?
+      payment_type == 'PayPalAccount'
     end
 
     def address_attributes=(attributes)
